@@ -4,7 +4,11 @@ grammar TinyPiE;
 expr: addExpr
       ;
 
-addExpr: addExpr ADDOP mulExpr
+addExpr: addExpr ADDOP bitExpr
+	| bitExpr
+	;
+
+bitExpr: bitExpr BITOP mulExpr
 	| mulExpr
 	;
 
@@ -18,8 +22,9 @@ unaryExpr: VALUE			# literalExpr
 	;
 
 ADDOP: '+'|'-';
+BITOP: '&'|'|';
 MULOP: '*'|'/';
 
 IDENTIFIER: 'x'|'y'|'z';
-VALUE: [1-9] ([0-9]+);
+VALUE: [1-9] ([0-9]*);
 WS: [ \t\r\n] -> skip;
