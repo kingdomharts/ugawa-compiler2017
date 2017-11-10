@@ -1,6 +1,7 @@
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import parser.TinyPiEParser.AddExprContext;
+import parser.TinyPiEParser.BitExprContext;
 import parser.TinyPiEParser.ExprContext;
 import parser.TinyPiEParser.LiteralExprContext;
 import parser.TinyPiEParser.MulExprContext;
@@ -15,11 +16,20 @@ public class ASTGenerator {
 		} else if (ctxx instanceof AddExprContext) {
 			AddExprContext ctx = (AddExprContext) ctxx;
 			if (ctx.addExpr() == null)
-				return translateExpr(ctx.mulExpr());
+				return translateExpr(ctx.bitExpr());
 			ASTNode lhs = translateExpr(ctx.addExpr());
-			ASTNode rhs = translateExpr(ctx.mulExpr());
+			ASTNode rhs = translateExpr(ctx.bitExpr());
 			return new ASTBinaryExprNode(ctx.ADDOP().getText(), lhs, rhs);
-		} else if (ctxx instanceof MulExprContext) {
+		} 
+		 else if (ctxx instanceof BitExprContext) {
+				BitExprContext ctx = (BitExprContext) ctxx;
+				if (ctx.bitExpr() == null)
+					return translateExpr(ctx.mulExpr());
+				ASTNode lhs = translateExpr(ctx.bitExpr());
+				ASTNode rhs = translateExpr(ctx.mulExpr());
+				return new ASTBinaryExprNode(ctx.BITOP().getText(), lhs, rhs);
+			}
+		 else if (ctxx instanceof MulExprContext) {
 			MulExprContext ctx = (MulExprContext) ctxx;
 			if (ctx.mulExpr() == null)
 				return translateExpr(ctx.unaryExpr());
